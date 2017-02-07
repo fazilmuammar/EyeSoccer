@@ -35,6 +35,10 @@
         <activity android:name=".Activity.ESVideoDetail"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="screenLayout|screenSize|orientation"/>
+
+        <activity android:name=".Activity.ESListReferee"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

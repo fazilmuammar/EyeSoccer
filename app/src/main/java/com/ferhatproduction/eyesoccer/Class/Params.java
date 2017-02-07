@@ -17,6 +17,8 @@ public class Params {
     public static final String URL_WATCH = BASE_URL+"/videos";
     public static final String URL_EVENTS = BASE_URL+"/events";
 
+    public static final String URL_REFEREE = BASE_URL+"/referees";
+
     //http://private-68f902-eyesoccer.apiary-mock.com/news
     //http://eyesoccer-didikh.rhcloud.com/WebApi/v1/secure/news
 

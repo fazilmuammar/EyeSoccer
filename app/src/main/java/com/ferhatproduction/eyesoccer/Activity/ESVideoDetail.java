@@ -112,7 +112,7 @@ public class ESVideoDetail extends AppCompatActivity implements View.OnClickList
 
 
 
-//        new RequestTaskDetail().execute();
+//        new RequestTaskReferee().execute();
 
     }
 

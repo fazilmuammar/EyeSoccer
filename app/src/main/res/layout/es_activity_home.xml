@@ -188,7 +188,7 @@
                 android:id="@+id/menu_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/scrim"
+                android:background="@android:color/transparent"
                 android:visibility="invisible"
                 >
 
@@ -202,6 +202,7 @@
                     app:arc_freeAngle="true"
                     app:arc_origin="bottom"
                     app:arc_radius="140dp"
+                    android:background="@android:color/transparent"
                     >
 
                     <LinearLayout

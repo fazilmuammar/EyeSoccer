@@ -91,6 +91,9 @@ public class ESHome extends AppCompatActivity implements
 
         mainTitle = (TextView)findViewById(R.id.mainTitle);
 
+        findViewById(R.id.radialWasit).setOnClickListener(this);
+
+
         setupTabs();
     }
 
@@ -153,7 +156,7 @@ public class ESHome extends AppCompatActivity implements
 
     @Override
     public void onFragmentInteraction(String id, int type) {
-        Log.d("log", " ---> type detail : "+type);
+        hideMenu();
 
         if(type == Params.TYPE_NEWS) {
             Intent intent = new Intent(this, ESNewsDetail.class);
@@ -161,18 +164,11 @@ public class ESHome extends AppCompatActivity implements
             intent.putExtra("type", type);
             startActivity(intent);
         }
-//        else if(type == Params.TYPE_WATCH) {
-//            Intent intent = new Intent(this, ESVideoDetail.class);
-//            intent.putExtra("id", id);
-//            intent.putExtra("type", type);
-//            intent.putExtra("path", type);
-//            startActivity(intent);
-//        }
-
     }
 
     @Override
     public void onFragmentVideoInteraction(String id, int type, String path) {
+        hideMenu();
         Intent intent = new Intent(this, ESVideoDetail.class);
         intent.putExtra("id", id);
         intent.putExtra("type", type);
@@ -182,11 +178,12 @@ public class ESHome extends AppCompatActivity implements
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.tab1Button){
-
-        } else if(view.getId() == R.id.tab2Button){
-            viewPager.setCurrentItem(1);
+        if (view.getId() == R.id.fab) {
+            onFabClick(view);
+            return;
         }
+
+        hideMenu();
 
         switch (view.getId()){
             case R.id.tab1Button:
@@ -220,12 +217,14 @@ public class ESHome extends AppCompatActivity implements
                 iconWallet.setImageResource(R.drawable.icon_eyewallet_f);
                 iconWalletLabel.setTextColor(Color.parseColor(focusColor));
                 break;
+
+            case R.id.radialWasit:
+                Intent iWasit = new Intent(this, ESListReferee.class);
+                startActivity(iWasit);
+                break;
         }
 
-        if (view.getId() == R.id.fab) {
-            onFabClick(view);
-            return;
-        }
+
     }
 
     private void resetTabs(){
@@ -243,7 +242,7 @@ public class ESHome extends AppCompatActivity implements
     /*** called from News fragment ***/
     @Override
     public void onFragmentNewsInteraction(String id, int type) {
-
+        hideMenu();
         Intent intent = new Intent(this, ESNewsDetail.class);
         intent.putExtra("id", id);
         intent.putExtra("type", type);
@@ -358,9 +357,15 @@ public class ESHome extends AppCompatActivity implements
         item.setTranslationX(dx);
         item.setTranslationY(dy);
 
+//        Animator anim = ObjectAnimator.ofPropertyValuesHolder(
+//                item,
+//                AnimatorUtils.rotation(0f, 720f),
+//                AnimatorUtils.translationX(dx, 0f),
+//                AnimatorUtils.translationY(dy, 0f)
+//        );
+
         Animator anim = ObjectAnimator.ofPropertyValuesHolder(
                 item,
-                AnimatorUtils.rotation(0f, 720f),
                 AnimatorUtils.translationX(dx, 0f),
                 AnimatorUtils.translationY(dy, 0f)
         );
@@ -372,9 +377,15 @@ public class ESHome extends AppCompatActivity implements
         float dx = fab.getX() - item.getX();
         float dy = fab.getY() - item.getY();
 
+//        Animator anim = ObjectAnimator.ofPropertyValuesHolder(
+//                item,
+//                AnimatorUtils.rotation(720f, 0f),
+//                AnimatorUtils.translationX(0f, dx),
+//                AnimatorUtils.translationY(0f, dy)
+//        );
+
         Animator anim = ObjectAnimator.ofPropertyValuesHolder(
                 item,
-                AnimatorUtils.rotation(720f, 0f),
                 AnimatorUtils.translationX(0f, dx),
                 AnimatorUtils.translationY(0f, dy)
         );
