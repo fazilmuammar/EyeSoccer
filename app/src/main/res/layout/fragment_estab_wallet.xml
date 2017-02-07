@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ferhatproduction.eyesoccer.Fragment.ESTabHomeFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Under Development"
+        android:textSize="@dimen/item_font_size_medium"
+        android:textStyle="bold"
+        android:layout_margin="10dp"/>
+
+</FrameLayout>

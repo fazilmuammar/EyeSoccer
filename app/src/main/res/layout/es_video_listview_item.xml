@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="0dp">
+        <!-- Big Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/bigInfo">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:background="#ccc"
+                android:id="@+id/imgBig"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/space_medium">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tTitleBig"
+                    android:textStyle="bold"
+                    android:text="@string/dummy_title"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tTimeBig"
+                    android:text="30 menit yang lalu"
+                    android:textColor="@color/black_overlay"
+                    android:textSize="@dimen/item_font_size_mini"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Standard Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/info">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+                <ImageView
+                    android:id="@+id/img"
+                    android:scaleType="centerCrop"
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:background="#ccc"
+                    android:src="@drawable/dummy_image" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lorem ipsum dolor sit amet nuisaance demo carpo"
+                    android:textColor="#000"
+                    android:id="@+id/tTitle"
+                    android:layout_toRightOf="@+id/img"
+                    android:layout_marginLeft="10dp"
+                    android:maxLines="2"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tTime"
+                    android:text="30 menit yang lalu"
+                    android:textColor="@color/black_overlay"
+                    android:textSize="@dimen/item_font_size_mini"
+                    android:layout_below="@+id/tTitle"
+                    android:layout_alignLeft="@+id/tTitle"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>
