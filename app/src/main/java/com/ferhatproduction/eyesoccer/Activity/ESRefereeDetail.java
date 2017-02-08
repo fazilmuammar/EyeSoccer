@@ -15,8 +15,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.ferhatproduction.eyesoccer.Adapter.ESListRefereeAdapter;
+import com.bumptech.glide.Glide;
 import com.ferhatproduction.eyesoccer.Adapter.ESListRelatedNewsAdapter;
 import com.ferhatproduction.eyesoccer.Class.Params;
 import com.ferhatproduction.eyesoccer.R;
@@ -37,48 +38,73 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class ESListReferee extends AppCompatActivity implements View.OnClickListener, ESListRefereeAdapter.ListItemClickListener {
+public class ESRefereeDetail extends AppCompatActivity implements View.OnClickListener {
     private String id;
     private int type;
     private JSONArray categories, relatedNews;
     private int createDate;
 
     private ImageView img;
-    private TextView tTitle, tContent;
+    private TextView tName, tDescription;
     private ProgressBar progressBar;
-    private ScrollView vContent;
-    private RecyclerView list;
+    private ScrollView content;
+    private RecyclerView listRelatedNews;
+    private String name;
+
+    private TextView tWarganegara, tProfesi, tTempatLahir, tTglLahir, tTampil, tBerat, tTinggi, tLisensi, tDebut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_es_referee_list);
+        setContentView(R.layout.activity_es_referee_detail);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        id = getIntent().getStringExtra("id");
+        name = getIntent().getStringExtra("name");
 
+        Log.d("log"," id : "+id);
+
+        content = (ScrollView)findViewById(R.id.content);
+        content.setVisibility(View.GONE);
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+        img = (ImageView)findViewById(R.id.img);
+        tName = (TextView) findViewById(R.id.tName);
+        tDescription = (TextView) findViewById(R.id.description);
+        tWarganegara = (TextView) findViewById(R.id.warganegara);
+        tTempatLahir = (TextView) findViewById(R.id.tempatLahir);
+        tTglLahir = (TextView) findViewById(R.id.tanggalLahir);
+        tBerat = (TextView) findViewById(R.id.berat);
+        tTinggi = (TextView) findViewById(R.id.tinggi);
+        tDebut = (TextView) findViewById(R.id.debut);
+        tLisensi = (TextView) findViewById(R.id.lisensi);
+        tTampil = (TextView) findViewById(R.id.tampil);
+
+        tName.setText(name);
 
         ImageButton btnBack = (ImageButton)findViewById(R.id.btnBackActionBar);
         btnBack.setOnClickListener(this);
 
-        list = (RecyclerView)findViewById(R.id.list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        list.setLayoutManager(layoutManager);
+//        listRelatedNews = (RecyclerView)findViewById(R.id.listRelatedNews);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        listRelatedNews.setLayoutManager(layoutManager);
 
-        new RequestTaskReferee().execute();
+        showProgress(true);
+        new RequestTaskRefereeDetail().execute();
+
+
 
     }
 
     private void showProgress(boolean show){
         if(show){
-            list.setVisibility(View.GONE);
+            content.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
-            list.setVisibility(View.VISIBLE);
+            content.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         }
     }
@@ -90,14 +116,9 @@ public class ESListReferee extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    @Override
-    public void onListItemClick(String id, int type) {
+    private class RequestTaskRefereeDetail extends AsyncTask<String, Void, String> {
 
-    }
-
-    private class RequestTaskReferee extends AsyncTask<String, Void, String> {
-
-        public RequestTaskReferee(){
+        public RequestTaskRefereeDetail(){
         }
 
         @Override
@@ -108,7 +129,7 @@ public class ESListReferee extends AppCompatActivity implements View.OnClickList
 
             try {
                 /*** set url ***/
-                URL url = new URL(Params.URL_REFEREE);
+                URL url = new URL(Params.URL_REFEREE+"/"+id);
                 Log.d("log","url:"+url);
                 conn = (HttpURLConnection) url.openConnection();
 
@@ -171,29 +192,39 @@ public class ESListReferee extends AppCompatActivity implements View.OnClickList
 
             try{
 
-                JSONObject response = new JSONObject(s);
-                String status = response.get("status").toString();
+                JSONObject result = new JSONObject(s);
+                String status = result.get("status").toString();
 
-//                Log.d("log"," result : "+s);
+                Log.d("log"," result : "+s);
 
                 if(status.equals("success")){
-                    JSONArray data = (JSONArray) response.get("data");
+                    JSONObject data = (JSONObject) result.get("data");
 
-                    ArrayList<HashMap<String,Object>> result = new ArrayList<HashMap<String,Object>>();
-                    for(int i=0; i<data.length(); i++){
-                        JSONObject item = (JSONObject) data.get(i);
-                        HashMap<String,Object> temp = new HashMap<String,Object>();
-                        temp.put("id", item.get("id").toString());
-                        temp.put("photo_url", item.get("photo_url").toString());
-                        temp.put("profession", item.get("profession").toString());
-                        temp.put("name", item.get("name").toString());
-                        result.add(temp);
-                    }
+                    String imgPath = data.get("photo_url").toString();
+                    String profession = data.get("profession").toString();
+                    String nationality = data.get("nationality").toString();
+                    String birth_date = data.get("birth_date").toString();
+                    String birth_place = data.get("birth_place").toString();
+                    String debut_date = data.get("debut_date").toString();
+                    String height = data.get("height").toString();
+                    String weight = data.get("weight").toString();
+                    String license = data.get("fifa_licence").toString();
+                    String appearance = data.get("appearance").toString();
+                    JSONArray careers = (JSONArray) data.get("careers");
 
-                    ESListRefereeAdapter listNewsAdapter = new ESListRefereeAdapter(result, ESListReferee.this);
-                    list.invalidate();
-                    list.setAdapter(listNewsAdapter);
+                    Glide.with(getBaseContext()).load(imgPath).placeholder(R.mipmap.ic_launcher).into(img);
 
+
+                    tWarganegara.setText(nationality);
+                    tTempatLahir.setText(birth_place);
+                    tTglLahir.setText(birth_date);
+                    tDebut.setText(debut_date);
+                    tTampil.setText(appearance);
+                    tBerat.setText(weight);
+                    tTinggi.setText(height);
+                    tLisensi.setText(license);
+
+                    // TODO: 2/8/17 careers
 
                 }
 
@@ -201,66 +232,5 @@ public class ESListReferee extends AppCompatActivity implements View.OnClickList
                 Log.d("log","exception -> "+ e.getMessage());
             }
         }
-    }
-
-    private Date getDate(int time) {
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(time);
-        Date date = (Date) DateFormat.format("dd-MM-yyyy hh:mm:ss", cal);
-        return date;
-    }
-
-    public String getDifference(Date date1, Date date2){
-
-        //milliseconds
-        long different = date2.getTime() - date1.getTime();
-
-//        Log.d("log","now : "+ date2);
-//        Log.d("log","create date : "+ date1);
-//        Log.d("log","different : " + different);
-//        Log.d("log","different : " + different);
-
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-
-        long elapsedDays = different / daysInMilli;
-        different = different % daysInMilli;
-
-        long elapsedHours = different / hoursInMilli;
-        different = different % hoursInMilli;
-
-        long elapsedMinutes = different / minutesInMilli;
-        different = different % minutesInMilli;
-
-        long elapsedSeconds = different / secondsInMilli;
-
-        String dayInfo, hourInfo, minInfo;
-        if(elapsedDays > 1){
-            dayInfo = elapsedDays+" days ago";
-            return dayInfo;
-        } else if(elapsedDays == 1) {
-            dayInfo = elapsedDays+" day ago";
-            return dayInfo;
-        }
-
-        if(elapsedHours > 0){
-            hourInfo = ", "+elapsedHours+" hrs ago";
-            return hourInfo;
-        } else if(elapsedHours == 1) {
-            hourInfo = ", "+elapsedHours+" hr ago";
-            return hourInfo;
-        }
-
-        if(elapsedMinutes > 0){
-            minInfo = ", "+elapsedMinutes+" minutes ago";
-            return minInfo;
-        } else if(elapsedMinutes == 1) {
-            minInfo = ", "+elapsedMinutes+" minute ago";
-            return minInfo;
-        }
-//        tRemain.setText(dayInfo+hourInfo);
-        return "";
     }
 }

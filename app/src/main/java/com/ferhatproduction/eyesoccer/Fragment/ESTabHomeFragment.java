@@ -1,6 +1,7 @@
 package com.ferhatproduction.eyesoccer.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ferhatproduction.eyesoccer.Adapter.ESHomeListEventsAdapter;
 import com.ferhatproduction.eyesoccer.Adapter.ESHomeListNewsAdapter;
@@ -32,13 +34,16 @@ import java.util.HashMap;
 
 public class ESTabHomeFragment extends Fragment implements
         ESHomeListNewsAdapter.ListItemClickListener,
-        ESHomeListVideoAdapter.ListItemVideoListener{
+        ESHomeListVideoAdapter.ListItemVideoListener,
+        View.OnClickListener{
     private ArrayList<HashMap<String,Object>> resultNews, resultWatch, resultEvents;
     private RecyclerView listNews, listWatch, listEvents;
     private LinearLayoutManager newsLinearLayoutManager, watchLinearLayoutManager, eventsLinearLayoutManager;
     private ESHomeListNewsAdapter listNewsAdapter;
     private ESHomeListVideoAdapter listWatchAdapter;
     private ESHomeListEventsAdapter listEventsAdapter;
+
+    private TextView tAllnews, tAllvideo, tAllevent;
 
     private OnFragmentInteractionListener mListener;
 //    private OnFragmentVideoInteractionListener mListenerVideo;
@@ -81,6 +86,13 @@ public class ESTabHomeFragment extends Fragment implements
         eventsLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         listEvents.setLayoutManager(eventsLinearLayoutManager);
 
+        tAllnews = (TextView)view.findViewById(R.id.allNews);
+        tAllvideo = (TextView)view.findViewById(R.id.allVideo);
+        tAllevent = (TextView)view.findViewById(R.id.allEvent);
+        tAllnews.setOnClickListener(this);
+        tAllvideo.setOnClickListener(this);
+        tAllevent.setOnClickListener(this);
+
         new RequestTaskNews().execute();
 
         return view;
@@ -97,6 +109,17 @@ public class ESTabHomeFragment extends Fragment implements
     public void onListItemVideoClick(String id, int type, String path) {
         if (mListener != null) {
             mListener.onFragmentVideoInteraction(id, type, path);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.allNews){
+            mListener.onGoToList(2);
+        } else if(view.getId() == R.id.allVideo){
+            mListener.onGoToList(1);
+        } else if(view.getId() == R.id.allEvent){
+
         }
     }
 
@@ -461,6 +484,7 @@ public class ESTabHomeFragment extends Fragment implements
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String id, int type);
         void onFragmentVideoInteraction(String id, int type, String path);
+        void onGoToList(int tabIndex);
     }
 
     public interface OnFragmentInteractionListenerVideo {

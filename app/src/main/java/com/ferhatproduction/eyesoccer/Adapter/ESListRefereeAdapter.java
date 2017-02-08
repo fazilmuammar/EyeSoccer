@@ -49,7 +49,7 @@ public class ESListRefereeAdapter extends RecyclerView.Adapter<ESListRefereeAdap
         public void onClick(View view) {
 //            Log.d("log", "click --> "+item.get("id"));
             int clickedPosition = getAdapterPosition();
-            mOnClickListener.onListItemClick(items.get(clickedPosition).get("id").toString(), Params.TYPE_NEWS);
+            mOnClickListener.onListItemClick(items.get(clickedPosition).get("id").toString(), items.get(clickedPosition).get("name").toString());
         }
 
         public void bindContent(HashMap<String, Object> item, int position) {
@@ -71,7 +71,7 @@ public class ESListRefereeAdapter extends RecyclerView.Adapter<ESListRefereeAdap
     }
 
     public interface ListItemClickListener{
-        void onListItemClick(String id, int type);
+        void onListItemClick(String id, String name);
     }
 
     public ESListRefereeAdapter(ArrayList<HashMap<String,Object>> items, ListItemClickListener mOnClickListener){

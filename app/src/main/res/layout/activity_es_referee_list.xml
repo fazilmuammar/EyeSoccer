@@ -47,6 +47,13 @@
                     android:textStyle="bold"
                     android:layout_centerInParent="true"/>
 
+                <!--<android.support.v7.widget.SearchView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/searchview"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--/>-->
+
                 <!--<ImageButton-->
                     <!--android:id="@+id/btnSearch"-->
                     <!--android:layout_width="20dp"-->
@@ -69,6 +76,26 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/progressBar"/>
+
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/space_medium">
+        <android.support.v7.widget.SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchview"
+            android:iconifiedByDefault="false"
+            android:clickable="true"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.2dp"
+            android:background="@color/colorAccent" />
+    </LinearLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

@@ -41,6 +41,7 @@
                             android:layout_toRightOf="@+id/icon1"
                             android:layout_marginLeft="10dp"/>
                         <TextView
+                            android:id="@+id/allNews"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="See all"
@@ -88,6 +89,7 @@
                             android:layout_centerVertical="true"
                             android:id="@+id/title2"/>
                         <TextView
+                            android:id="@+id/allVideo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="See all"
@@ -133,6 +135,7 @@
                             android:layout_toRightOf="@+id/icon3"
                             android:layout_marginLeft="10dp"/>
                         <TextView
+                            android:id="@+id/allEvent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="See all"

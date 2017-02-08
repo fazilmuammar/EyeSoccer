@@ -36,7 +36,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="screenLayout|screenSize|orientation"/>
 
-        <activity android:name=".Activity.ESListReferee"
+        <activity android:name=".Activity.ESRefereeList"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".Activity.ESRefereeDetail"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
     </application>

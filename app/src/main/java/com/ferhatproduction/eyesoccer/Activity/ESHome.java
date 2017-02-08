@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -29,7 +28,6 @@ import com.ferhatproduction.eyesoccer.Fragment.ESTabHomeFragment;
 import com.ferhatproduction.eyesoccer.Fragment.ESTabNewsFragment;
 import com.ferhatproduction.eyesoccer.Fragment.ESTabVideoFragment;
 import com.ferhatproduction.eyesoccer.Fragment.ESTabWalletFragment;
-import com.ferhatproduction.eyesoccer.Fragment.ESTabWatchFragment_x;
 import com.ferhatproduction.eyesoccer.R;
 import com.ogaclejapan.arclayout.ArcLayout;
 
@@ -177,6 +175,24 @@ public class ESHome extends AppCompatActivity implements
     }
 
     @Override
+    public void onGoToList(int tabIndex) {
+        if(tabIndex == 1){
+            viewPager.setCurrentItem(1);
+            mainTitle.setText(getResources().getString(R.string.title_video));
+            resetTabs();
+            iconVideo.setImageResource(R.drawable.icon_eyewatch_f);
+            iconVideoLabel.setTextColor(Color.parseColor(focusColor));
+        } else if(tabIndex == 2){
+            viewPager.setCurrentItem(2);
+            mainTitle.setText(getResources().getString(R.string.title_news));
+            resetTabs();
+            iconNews.setImageResource(R.drawable.icon_eyenews_f);
+            iconNewsLabel.setTextColor(Color.parseColor(focusColor));
+        }
+
+    }
+
+    @Override
     public void onClick(View view) {
         if (view.getId() == R.id.fab) {
             onFabClick(view);
@@ -219,7 +235,7 @@ public class ESHome extends AppCompatActivity implements
                 break;
 
             case R.id.radialWasit:
-                Intent iWasit = new Intent(this, ESListReferee.class);
+                Intent iWasit = new Intent(this, ESRefereeList.class);
                 startActivity(iWasit);
                 break;
         }
