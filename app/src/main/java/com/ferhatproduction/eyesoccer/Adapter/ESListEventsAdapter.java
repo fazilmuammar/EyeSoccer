@@ -18,7 +18,7 @@ import java.util.HashMap;
  * Created by leo on 1/28/17.
  */
 
-public class ESHomeListEventsAdapter extends RecyclerView.Adapter<ESHomeListEventsAdapter.ContentHolder> {
+public class ESListEventsAdapter extends RecyclerView.Adapter<ESListEventsAdapter.ContentHolder> {
     private ArrayList<HashMap<String,Object>> items;
 
 
@@ -62,19 +62,19 @@ public class ESHomeListEventsAdapter extends RecyclerView.Adapter<ESHomeListEven
         void onListEventItemClick(String id);
     }
 
-    public ESHomeListEventsAdapter(ArrayList<HashMap<String,Object>> items, ListItemEventListener context){
+    public ESListEventsAdapter(ArrayList<HashMap<String,Object>> items, ListItemEventListener context){
         this.items = items;
         this.mOnEventClickListener = context;
 
     }
     @Override
-    public ESHomeListEventsAdapter.ContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View thisView = LayoutInflater.from(parent.getContext()).inflate(R.layout.es_home_events_listview_home, parent,  false);
+    public ESListEventsAdapter.ContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View thisView = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_es_home_events_listview, parent,  false);
         return new ContentHolder(thisView);
     }
 
     @Override
-    public void onBindViewHolder(ESHomeListEventsAdapter.ContentHolder holder, int position) {
+    public void onBindViewHolder(ESListEventsAdapter.ContentHolder holder, int position) {
         holder.bindContent(items.get(position));
 
     }

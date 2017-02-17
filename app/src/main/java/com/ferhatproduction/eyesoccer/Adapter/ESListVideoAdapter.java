@@ -50,8 +50,13 @@ public class ESListVideoAdapter extends RecyclerView.Adapter<ESListVideoAdapter.
         public void onClick(View view) {
 //            Log.d("log", "click --> "+item.get("id"));
             int clickedPosition = getAdapterPosition();
+            String title = items.get(clickedPosition).get("title").toString();
             String path = items.get(clickedPosition).get("video_url").toString();
-            mOnClickListener.onListItemClick(items.get(clickedPosition).get("id").toString(), Params.TYPE_WATCH, path);
+            String pos = items.get(clickedPosition).get("id").toString();
+            int duration = Integer.parseInt((String)items.get(clickedPosition).get("duration"));
+            long createdate = (long)items.get(clickedPosition).get("duration");
+            mOnClickListener.onListItemClick(pos, Params.TYPE_WATCH, path, duration, title, createdate);
+
         }
 
         public void bindContent(HashMap<String, Object> item, int position) {
@@ -82,7 +87,7 @@ public class ESListVideoAdapter extends RecyclerView.Adapter<ESListVideoAdapter.
     }
 
     public interface ListItemVideoClickListener{
-        void onListItemClick(String id, int type, String path);
+        void onListItemClick(String id, int type, String path, int duration, String title, long createdate);
     }
 
     public ESListVideoAdapter(ArrayList<HashMap<String,Object>> items, ListItemVideoClickListener mOnClickListener){

@@ -20,5 +20,6 @@
     <dimen name="item_font_size_mini">12sp</dimen>
     <dimen name="space_small">5dp</dimen>
     <dimen name="space_medium">10dp</dimen>
+    <dimen name="space_standard">12dp</dimen>
     <dimen name="space_big">15dp</dimen>
 </resources>

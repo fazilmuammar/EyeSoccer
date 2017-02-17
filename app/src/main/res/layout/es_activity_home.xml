@@ -85,102 +85,205 @@
                     app:tabGravity="fill"
                     android:visibility="gone"/>
 
-                <TableLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:stretchColumns="0,1,2,3,4,5"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
                     android:background="#ececec">
-                    <TableRow>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:id="@+id/tab1Button"
-                            android:gravity="center"
-                            android:layout_marginTop="@dimen/padding_top_home_tab">
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:id="@+id/tabIconHome"
-                                android:src="@drawable/icon_home"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Home"
-                                android:id="@+id/tabIconHomeLabel"/>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:id="@+id/tab2Button"
-                            android:gravity="center"
-                            android:layout_marginTop="@dimen/padding_top_home_tab">
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:id="@+id/tabIconVideo"
-                                android:src="@drawable/icon_eyewatch"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Watch"
-                                android:id="@+id/tabIconVideoLabel"/>
-                        </LinearLayout>
-                        <LinearLayout
+                    <LinearLayout
+                        android:id="@+id/tab1Button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
                             android:layout_width="20dp"
-                            android:layout_height="45dp"
-                            android:id="@+id/fab_dummy"
-                            android:gravity="center"
-                            android:background="@drawable/shape_circle"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginTop="0dp"
-                            android:visibility="invisible">
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:src="@drawable/icon_radial"/>
-
-                        </LinearLayout>
-                        <LinearLayout
+                            android:layout_height="20dp"
+                            android:id="@+id/tabIconHome"
+                            android:src="@drawable/icon_home"/>
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:id="@+id/tab4Button"
-                            android:gravity="center"
-                            android:layout_marginTop="@dimen/padding_top_home_tab">
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/icon_eyenews"
-                                android:id="@+id/tabIconNews"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="News"
-                                android:id="@+id/tabIconNewsLabel"/>
-                        </LinearLayout>
-                        <LinearLayout
+                            android:text="@string/home_title_home"
+                            android:id="@+id/tabIconHomeLabel"
+                            android:textSize="@dimen/item_font_size_mini"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/tab2Button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:id="@+id/tabIconVideo"
+                            android:src="@drawable/icon_eyewatch"/>
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:id="@+id/tab5Button"
-                            android:gravity="center"
-                            android:layout_marginTop="@dimen/padding_top_home_tab">
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/icon_eyewallet"
-                                android:id="@+id/tabIconWallet"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Wallet"
-                                android:id="@+id/tabIconWalletLabel"/>
-                        </LinearLayout>
+                            android:text="@string/home_title_video"
+                            android:id="@+id/tabIconVideoLabel"
+                            android:textSize="@dimen/item_font_size_mini"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/fabx"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/shape_circle">
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/icon_radial"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/tab4Button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/icon_eyenews"
+                            android:id="@+id/tabIconNews"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/home_title_news"
+                            android:id="@+id/tabIconNewsLabel"
+                            android:textSize="@dimen/item_font_size_mini"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/tab5Button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/icon_eyewallet"
+                            android:id="@+id/tabIconWallet"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/home_title_wallet"
+                            android:id="@+id/tabIconWalletLabel"
+                            android:textSize="@dimen/item_font_size_mini"/>
+                    </LinearLayout>
 
-                    </TableRow>
-                </TableLayout>
+                </LinearLayout>
+
+                <!--<TableLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:stretchColumns="0,1,2,3,4,5"-->
+                <!--android:background="#ececec"-->
+                <!--android:visibility="visible">-->
+                <!--<TableRow>-->
+                <!--<LinearLayout-->
+                <!--android:id="@+id/tab1Button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_marginTop="@dimen/padding_top_home_tab">-->
+                <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:id="@+id/tabIconHome"-->
+                <!--android:src="@drawable/icon_home"/>-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/home_title_home"-->
+                <!--android:id="@+id/tabIconHomeLabel"-->
+                <!--android:textSize="@dimen/item_font_size_mini"/>-->
+                <!--</LinearLayout>-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:id="@+id/tab2Button"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_marginTop="@dimen/padding_top_home_tab">-->
+                <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:id="@+id/tabIconVideo"-->
+                <!--android:src="@drawable/icon_eyewatch"/>-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/home_title_video"-->
+                <!--android:id="@+id/tabIconVideoLabel"-->
+                <!--android:textSize="@dimen/item_font_size_mini"/>-->
+                <!--</LinearLayout>-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:id="@+id/fab_dummy"-->
+                <!--android:gravity="center"-->
+                <!--android:background="@drawable/shape_circle"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_marginTop="0dp"-->
+                <!--android:visibility="invisible">-->
+                <!--<ImageView-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:src="@drawable/icon_radial"-->
+                <!--/>-->
+
+                <!--</LinearLayout>-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:id="@+id/tab4Button"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_marginTop="@dimen/padding_top_home_tab">-->
+                <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:src="@drawable/icon_eyenews"-->
+                <!--android:id="@+id/tabIconNews"/>-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/home_title_news"-->
+                <!--android:id="@+id/tabIconNewsLabel"-->
+                <!--android:textSize="@dimen/item_font_size_mini"/>-->
+                <!--</LinearLayout>-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:id="@+id/tab5Button"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_marginTop="@dimen/padding_top_home_tab">-->
+                <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:src="@drawable/icon_eyewallet"-->
+                <!--android:id="@+id/tabIconWallet"/>-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/home_title_wallet"-->
+                <!--android:id="@+id/tabIconWalletLabel"-->
+                <!--android:textSize="@dimen/item_font_size_mini"/>-->
+                <!--</LinearLayout>-->
+
+                <!--</TableRow>-->
+                <!--</TableLayout>-->
             </LinearLayout>
 
             <!-- Arc Layout -->
@@ -191,13 +294,11 @@
                 android:background="@android:color/transparent"
                 android:visibility="invisible"
                 >
-
-
                 <com.ogaclejapan.arclayout.ArcLayout
                     android:id="@+id/arc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="32dp"
+                    android:layout_marginBottom="42dp"
                     app:arc_axisRadius="54dp"
                     app:arc_freeAngle="true"
                     app:arc_origin="bottom"
@@ -240,19 +341,19 @@
             <!-- Arc Layout -->
 
             <LinearLayout
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/fab"
-                android:gravity="center"
-                android:background="@drawable/shape_circle"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="0dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true">
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/fab"
+            android:gravity="center"
+            android:background="@drawable/shape_circle"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="0dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/icon_radial"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_radial"/>
 
             </LinearLayout>
         </RelativeLayout>

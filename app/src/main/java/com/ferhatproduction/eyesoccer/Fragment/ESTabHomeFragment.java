@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ferhatproduction.eyesoccer.Activity.ESEventList;
 import com.ferhatproduction.eyesoccer.Adapter.ESHomeListEventsAdapter;
 import com.ferhatproduction.eyesoccer.Adapter.ESHomeListNewsAdapter;
 import com.ferhatproduction.eyesoccer.Adapter.ESHomeListVideoAdapter;
@@ -35,6 +36,7 @@ import java.util.HashMap;
 public class ESTabHomeFragment extends Fragment implements
         ESHomeListNewsAdapter.ListItemClickListener,
         ESHomeListVideoAdapter.ListItemVideoListener,
+        ESHomeListEventsAdapter.ListItemEventListener,
         View.OnClickListener{
     private ArrayList<HashMap<String,Object>> resultNews, resultWatch, resultEvents;
     private RecyclerView listNews, listWatch, listEvents;
@@ -106,9 +108,9 @@ public class ESTabHomeFragment extends Fragment implements
     }
 
     @Override
-    public void onListItemVideoClick(String id, int type, String path) {
+    public void onListItemVideoClick(String id, int type, String path, int duration, String title, long createdate) {
         if (mListener != null) {
-            mListener.onFragmentVideoInteraction(id, type, path);
+            mListener.onFragmentVideoInteraction(id, type, path, duration, title, createdate);
         }
     }
 
@@ -119,7 +121,15 @@ public class ESTabHomeFragment extends Fragment implements
         } else if(view.getId() == R.id.allVideo){
             mListener.onGoToList(1);
         } else if(view.getId() == R.id.allEvent){
+            Intent i = new Intent(getActivity(), ESEventList.class);
+            startActivity(i);
+        }
+    }
 
+    @Override
+    public void onListEventItemClick(String id) {
+        if (mListener != null) {
+            mListener.onFragmentEventInteraction(id);
         }
     }
 
@@ -189,7 +199,10 @@ public class ESTabHomeFragment extends Fragment implements
             } catch (IOException e) {
                 e.printStackTrace();
 
-            } finally {
+            } catch (Throwable t) {
+                t.printStackTrace();
+
+            }finally {
                 if(conn != null){
                     conn.disconnect();
                 }
@@ -215,29 +228,33 @@ public class ESTabHomeFragment extends Fragment implements
 
                 JSONObject result = new JSONObject(s);
                 String status = result.get("status").toString();
-                JSONObject data = (JSONObject) result.get("data");
-                JSONArray news = data.getJSONArray("news");
+
+                if(status.equals("success")){
+                    JSONObject data = (JSONObject) result.get("data");
+                    JSONArray news = data.getJSONArray("news");
 
 //                Log.d("log","result -> "+ news);
 
-                // Save to News array
-                resultNews = new ArrayList<HashMap<String,Object>>();
-                for(int i=0; i<news.length(); i++){
-                    JSONObject item = (JSONObject) news.get(i);
-                    HashMap<String,Object> temp = new HashMap<String,Object>();
-                    temp.put("id", item.get("id").toString());
-                    temp.put("featured_image_url", item.get("featured_image_url").toString());
-                    temp.put("create_date", item.get("create_date").toString());
-                    temp.put("title", item.get("title").toString());
-                    temp.put("categories", item.get("categories"));
-                    resultNews.add(temp);
+                    // Save to News array
+                    resultNews = new ArrayList<HashMap<String,Object>>();
+                    for(int i=0; i<news.length(); i++){
+                        JSONObject item = (JSONObject) news.get(i);
+                        HashMap<String,Object> temp = new HashMap<String,Object>();
+                        temp.put("id", item.get("id").toString());
+                        temp.put("featured_image_url", item.get("featured_image_url").toString());
+                        temp.put("create_date", item.get("create_date").toString());
+                        temp.put("title", item.get("title").toString());
+                        temp.put("categories", item.get("categories"));
+                        resultNews.add(temp);
+                    }
+
+                    listNewsAdapter = new ESHomeListNewsAdapter(resultNews, ESTabHomeFragment.this);
+                    listNews.invalidate();
+                    listNews.setAdapter(listNewsAdapter);
+
+                    new RequestTaskWatch().execute();
                 }
 
-                listNewsAdapter = new ESHomeListNewsAdapter(resultNews, ESTabHomeFragment.this);
-                listNews.invalidate();
-                listNews.setAdapter(listNewsAdapter);
-
-                new RequestTaskWatch().execute();
 
 
             } catch (Exception e){
@@ -318,37 +335,41 @@ public class ESTabHomeFragment extends Fragment implements
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-//            Log.d("log"," ---> videos : "+s);
+            Log.d("log"," ---> videos : "+s);
 
             try{
 
                 JSONObject result = new JSONObject(s);
                 String status = result.get("status").toString();
-                JSONObject data = (JSONObject) result.get("data");
-                JSONArray videos = data.getJSONArray("videos");
+
+                if(status.equals("success")){
+                    JSONObject data = (JSONObject) result.get("data");
+                    JSONArray videos = data.getJSONArray("videos");
 
 //                Log.d("log","result -> "+ news);
 
-                // Save to News array
-                resultWatch = new ArrayList<HashMap<String,Object>>();
-                for(int i=0; i<videos.length(); i++){
-                    JSONObject item = (JSONObject) videos.get(i);
-                    HashMap<String,Object> temp = new HashMap<String,Object>();
-                    temp.put("id", item.get("id").toString());
-                    temp.put("featured_image_url", item.get("featured_image_url").toString());
-                    temp.put("create_date", item.get("create_date").toString());
-                    temp.put("title", item.get("title").toString());
-                    temp.put("categories", item.get("categories"));
-                    temp.put("duration", item.get("duration").toString());
-                    temp.put("video_url", item.get("video_url").toString());
-                    resultWatch.add(temp);
+                    // Save to array
+                    resultWatch = new ArrayList<HashMap<String,Object>>();
+                    for(int i=0; i<videos.length(); i++){
+                        JSONObject item = (JSONObject) videos.get(i);
+                        HashMap<String,Object> temp = new HashMap<String,Object>();
+                        temp.put("id", item.get("id").toString());
+                        temp.put("featured_image_url", item.get("featured_image_url").toString());
+                        temp.put("create_date", item.get("create_date").toString());
+                        temp.put("title", item.get("title").toString());
+                        temp.put("categories", item.get("categories"));
+                        temp.put("duration", item.get("duration").toString());
+                        temp.put("video_url", item.get("video_url").toString());
+                        resultWatch.add(temp);
+                    }
+
+                    listWatchAdapter = new ESHomeListVideoAdapter(resultWatch, ESTabHomeFragment.this);
+                    listWatch.invalidate();
+                    listWatch.setAdapter(listWatchAdapter);
+
+                    new RequestTaskEvents().execute();
                 }
 
-                listWatchAdapter = new ESHomeListVideoAdapter(resultWatch, (ESHomeListVideoAdapter.ListItemVideoListener)ESTabHomeFragment.this);
-                listWatch.invalidate();
-                listWatch.setAdapter(listWatchAdapter);
-
-                new RequestTaskEvents().execute();
 
             } catch (Exception e){
                 Log.d("log","exception -> "+ e.getMessage());
@@ -431,30 +452,32 @@ public class ESTabHomeFragment extends Fragment implements
 
                 JSONObject result = new JSONObject(s);
                 String status = result.get("status").toString();
-//                JSONObject data = (JSONObject) result.get("data");
-//                JSONArray videos = data.getJSONArray("videos");
-                JSONArray events = result.getJSONArray("data");
+
+                if(status.equals("success")){
+                    JSONArray events = result.getJSONArray("data");
 
 //                Log.d("log","result -> "+ news);
 
-                // Save to News array
-                resultEvents = new ArrayList<HashMap<String,Object>>();
-                for(int i=0; i<events.length(); i++){
-                    JSONObject item = (JSONObject) events.get(i);
-                    HashMap<String,Object> temp = new HashMap<String,Object>();
-                    temp.put("id", item.get("id").toString());
-                    temp.put("featured_image_url", item.get("featured_image_url").toString());
-                    temp.put("create_date", item.get("create_date").toString());
-                    temp.put("title", item.get("title").toString());
-                    temp.put("event_start_date", item.get("event_start_date"));
-                    temp.put("event_finish_date", item.get("event_finish_date"));
-                    temp.put("location", item.get("location").toString());
-                    resultEvents.add(temp);
+                    // Save to array
+                    resultEvents = new ArrayList<HashMap<String,Object>>();
+                    for(int i=0; i<events.length(); i++){
+                        JSONObject item = (JSONObject) events.get(i);
+                        HashMap<String,Object> temp = new HashMap<String,Object>();
+                        temp.put("id", item.get("id").toString());
+                        temp.put("featured_image_url", item.get("featured_image_url").toString());
+                        temp.put("create_date", item.get("create_date").toString());
+                        temp.put("title", item.get("title").toString());
+                        temp.put("event_start_date", item.get("event_start_date"));
+                        temp.put("event_finish_date", item.get("event_finish_date"));
+                        temp.put("location", item.get("location").toString());
+                        resultEvents.add(temp);
+                    }
+
+                    listEventsAdapter = new ESHomeListEventsAdapter(resultEvents, (ESHomeListEventsAdapter.ListItemEventListener)ESTabHomeFragment.this);
+                    listEvents.invalidate();
+                    listEvents.setAdapter(listEventsAdapter);
                 }
 
-                listEventsAdapter = new ESHomeListEventsAdapter(resultEvents, getActivity());
-                listEvents.invalidate();
-                listEvents.setAdapter(listEventsAdapter);
 
 
             } catch (Exception e){
@@ -483,8 +506,9 @@ public class ESTabHomeFragment extends Fragment implements
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String id, int type);
-        void onFragmentVideoInteraction(String id, int type, String path);
+        void onFragmentVideoInteraction(String id, int type, String path, int duration, String title, long createdate);
         void onGoToList(int tabIndex);
+        void onFragmentEventInteraction(String id);
     }
 
     public interface OnFragmentInteractionListenerVideo {

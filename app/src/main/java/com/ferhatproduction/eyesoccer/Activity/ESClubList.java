@@ -4,21 +4,21 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.ferhatproduction.eyesoccer.Adapter.ESListRelatedNewsAdapter;
+import com.ferhatproduction.eyesoccer.Adapter.ESListClubAdapter;
 import com.ferhatproduction.eyesoccer.Class.Params;
 import com.ferhatproduction.eyesoccer.R;
 
@@ -32,80 +32,98 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class ESRefereeDetail extends AppCompatActivity implements View.OnClickListener {
+public class ESClubList extends AppCompatActivity implements View.OnClickListener, ESListClubAdapter.ListItemClickListener {
     private String id;
     private int type;
     private JSONArray categories, relatedNews;
     private int createDate;
 
     private ImageView img;
-    private TextView tName, tDescription;
+    private TextView tTitle, tContent;
     private ProgressBar progressBar;
-    private ScrollView content;
-    private RecyclerView listRelatedNews;
-    private String name;
-
-    private TextView tWarganegara, tProfesi, tTempatLahir, tTglLahir, tTampil, tBerat, tTinggi, tLisensi, tDebut;
+    private ScrollView vContent;
+    private RecyclerView list;
+    private SearchView searchView;
+    private ArrayList<HashMap<String,Object>> result;
+    private ESListClubAdapter listClubAdapter;
+    private LinearLayout searchLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_es_referee_detail);
+        setContentView(R.layout.activity_es_club_list);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        id = getIntent().getStringExtra("id");
-        name = getIntent().getStringExtra("name");
 
-        Log.d("log"," id : "+id);
-
-        content = (ScrollView)findViewById(R.id.content);
-        content.setVisibility(View.GONE);
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        img = (ImageView)findViewById(R.id.img);
-        tName = (TextView) findViewById(R.id.tName);
-        tDescription = (TextView) findViewById(R.id.description);
-        tWarganegara = (TextView) findViewById(R.id.warganegara);
-        tTempatLahir = (TextView) findViewById(R.id.tempatLahir);
-        tTglLahir = (TextView) findViewById(R.id.tanggalLahir);
-        tBerat = (TextView) findViewById(R.id.berat);
-        tTinggi = (TextView) findViewById(R.id.tinggi);
-        tDebut = (TextView) findViewById(R.id.debut);
-        tLisensi = (TextView) findViewById(R.id.lisensi);
-        tTampil = (TextView) findViewById(R.id.tampil);
-
-        tName.setText(name);
 
         ImageButton btnBack = (ImageButton)findViewById(R.id.btnBackActionBar);
         btnBack.setOnClickListener(this);
 
-//        listRelatedNews = (RecyclerView)findViewById(R.id.listRelatedNews);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        listRelatedNews.setLayoutManager(layoutManager);
+        list = (RecyclerView)findViewById(R.id.list);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),2);
+        list.setLayoutManager(layoutManager);
+
+        searchLayout = (LinearLayout)findViewById(R.id.searchLayout);
+
+
+
+        searchView = (SearchView)findViewById(R.id.searchview);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                query = query.toLowerCase();
+                final ArrayList<HashMap<String,Object>> filteredList = new ArrayList<HashMap<String,Object>>();
+                for(int i=0; i<result.size(); i++){
+                    String t = result.get(i).get("name").toString().toLowerCase();
+                    if(t.contains(query)){
+                        filteredList.add(result.get(i));
+                    }
+                }
+                listClubAdapter = new ESListClubAdapter(filteredList, ESClubList.this);
+//                list.invalidate();
+                list.setAdapter(listClubAdapter);
+                listClubAdapter.notifyDataSetChanged();
+
+                return true;
+            }
+        });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchView.onActionViewExpanded();
+            }
+        });
 
         showProgress(true);
-        new RequestTaskRefereeDetail().execute();
-
-
+        new RequestTaskClub().execute();
 
     }
 
     private void showProgress(boolean show){
         if(show){
-            content.setVisibility(View.GONE);
+            list.setVisibility(View.GONE);
+            searchLayout.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
-            content.setVisibility(View.VISIBLE);
+            list.setVisibility(View.VISIBLE);
+            searchLayout.setVisibility(View.VISIBLE);
+            searchLayout.requestFocus();
             progressBar.setVisibility(View.GONE);
         }
     }
@@ -117,9 +135,18 @@ public class ESRefereeDetail extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private class RequestTaskRefereeDetail extends AsyncTask<String, Void, String> {
+    @Override
+    public void onListItemClick(String id, String name) {
+        Intent intent = new Intent(this, ESClubDetail.class);
+        intent.putExtra("id", id);
+        intent.putExtra("name", name);
+        startActivity(intent);
 
-        public RequestTaskRefereeDetail(){
+    }
+
+    private class RequestTaskClub extends AsyncTask<String, Void, String> {
+
+        public RequestTaskClub(){
         }
 
         @Override
@@ -130,7 +157,7 @@ public class ESRefereeDetail extends AppCompatActivity implements View.OnClickLi
 
             try {
                 /*** set url ***/
-                URL url = new URL(Params.URL_REFEREE+"/"+id);
+                URL url = new URL(Params.URL_CLUB);
                 Log.d("log","url:"+url);
                 conn = (HttpURLConnection) url.openConnection();
 
@@ -166,7 +193,7 @@ public class ESRefereeDetail extends AppCompatActivity implements View.OnClickLi
             } catch (MalformedURLException e) {
                 e.printStackTrace();
 
-            } catch (IOException e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
 
             } finally {
@@ -193,41 +220,29 @@ public class ESRefereeDetail extends AppCompatActivity implements View.OnClickLi
 
             try{
 
-                JSONObject result = new JSONObject(s);
-                String status = result.get("status").toString();
+                JSONObject response = new JSONObject(s);
+                String status = response.get("status").toString();
 
-                Log.d("log"," result : "+s);
+//                Log.d("log"," result : "+s);
 
                 if(status.equals("success")){
-                    JSONObject data = (JSONObject) result.get("data");
+                    JSONArray data = (JSONArray) response.get("data");
 
-                    String imgPath = data.get("photo_url").toString();
-                    String profession = data.get("profession").toString();
-                    String nationality = data.get("nationality").toString();
-                    String birth_date = data.get("birth_date").toString();
-                    String birth_place = data.get("birth_place").toString();
-                    String debut_date = data.get("debut_date").toString();
-                    String height = data.get("height").toString();
-                    String weight = data.get("weight").toString();
-                    String license = data.get("fifa_licence").toString();
-                    String appearance = data.get("appearance").toString();
-                    JSONArray careers = (JSONArray) data.get("careers");
+                    result = new ArrayList<HashMap<String,Object>>();
+                    for(int i=0; i<data.length(); i++){
+                        JSONObject item = (JSONObject) data.get(i);
+                        HashMap<String,Object> temp = new HashMap<String,Object>();
+                        temp.put("id", item.get("id").toString());
+                        temp.put("photo_url", item.get("image_url").toString());
+                        temp.put("name", item.get("name").toString());
+                        result.add(temp);
+                    }
 
-                    Glide.with(getBaseContext()).load(imgPath).placeholder(R.mipmap.ic_launcher).into(img);
+                    listClubAdapter = new ESListClubAdapter(result, ESClubList.this);
+                    list.invalidate();
+                    list.setAdapter(listClubAdapter);
+                    listClubAdapter.notifyDataSetChanged();
 
-                    Date df = new Date(Long.valueOf(birth_date));
-                    String dateFormat = new SimpleDateFormat("dd MMMM yyyy").format(df);
-
-                    tWarganegara.setText(nationality);
-                    tTempatLahir.setText(birth_place);
-                    tTglLahir.setText(dateFormat);
-                    tDebut.setText(debut_date);
-                    tTampil.setText(appearance);
-                    tBerat.setText(weight);
-                    tTinggi.setText(height);
-                    tLisensi.setText(license);
-
-                    // TODO: 2/8/17 careers
 
                 }
 
@@ -236,4 +251,5 @@ public class ESRefereeDetail extends AppCompatActivity implements View.OnClickLi
             }
         }
     }
+
 }

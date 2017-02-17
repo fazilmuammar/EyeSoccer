@@ -45,7 +45,7 @@ public class ESNewsDetail extends AppCompatActivity implements View.OnClickListe
     private int createDate;
 
     private ImageView img;
-    private TextView tTitle, tContent;
+    private TextView tTitle, tContent, tTime;
     private ProgressBar progressBar;
     private ScrollView vContent;
     private RecyclerView listRelatedNews;
@@ -53,7 +53,7 @@ public class ESNewsDetail extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_esnews_detail);
+        setContentView(R.layout.activity_es_news_detail);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,6 +67,7 @@ public class ESNewsDetail extends AppCompatActivity implements View.OnClickListe
         progressBar.setVisibility(View.VISIBLE);
         img = (ImageView)findViewById(R.id.img);
         tTitle = (TextView) findViewById(R.id.tTitle);
+        tTime = (TextView) findViewById(R.id.tTime);
         tContent = (TextView) findViewById(R.id.tContent);
 
         ImageButton btnBack = (ImageButton)findViewById(R.id.btnBackActionBar);
@@ -192,9 +193,9 @@ public class ESNewsDetail extends AppCompatActivity implements View.OnClickListe
 
 //                    Log.d("log","---> getDifference("+createdDate+", "+now+")");
 
-                    String elapsetime = getDifference(createdDate, now);
+                    String elapsetime = Params.getCreateTime(createdDate, now);
 
-//                    Log.d("log","---> create date : "+ elapsetime);
+                    Log.d("log","---> News create date : "+ elapsetime);
 
 
 
@@ -205,6 +206,7 @@ public class ESNewsDetail extends AppCompatActivity implements View.OnClickListe
                     Glide.with(getBaseContext()).load(imgPath).into(img);
                     tTitle.setText(title);
                     tContent.setText(content);
+                    tTime.setText(elapsetime);
 
 //                    Log.d("log","---> Related News : "+ relatedNews);
                     /*** update related news ***/
@@ -263,11 +265,6 @@ public class ESNewsDetail extends AppCompatActivity implements View.OnClickListe
 
         //milliseconds
         long different = date2.getTime() - date1.getTime();
-
-//        Log.d("log","now : "+ date2);
-//        Log.d("log","create date : "+ date1);
-//        Log.d("log","different : " + different);
-//        Log.d("log","different : " + different);
 
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;

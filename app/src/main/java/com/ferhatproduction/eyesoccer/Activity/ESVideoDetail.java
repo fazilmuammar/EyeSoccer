@@ -54,7 +54,7 @@ public class ESVideoDetail extends AppCompatActivity implements View.OnClickList
     private int createDate;
 
     private ImageView img;
-    private TextView tTitle, tContent;
+    private TextView tTitle, tContent, tTime;
     private ProgressBar progressBar;
     private LinearLayout vContent;
     private RecyclerView listRelatedVideo;
@@ -63,6 +63,9 @@ public class ESVideoDetail extends AppCompatActivity implements View.OnClickList
     private RelativeLayout.LayoutParams paramsNotFullscreen; //if you're using RelativeLatout
     private AppBarLayout bar;
     private RelativeLayout frameVideo;
+    private int duration;
+    private long createdate;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,9 @@ public class ESVideoDetail extends AppCompatActivity implements View.OnClickList
         id = getIntent().getStringExtra("id");
         type = getIntent().getIntExtra("type", Params.TYPE_WATCH);
         videoPath = getIntent().getStringExtra("path");
+        duration = getIntent().getIntExtra("duration", 0);
+        title = getIntent().getStringExtra("title");
+        createdate = getIntent().getLongExtra("createdate", 0);
 
         Log.d("log"," ---> type : "+type);
         Log.d("log"," ---> path : "+videoPath);
@@ -87,6 +93,15 @@ public class ESVideoDetail extends AppCompatActivity implements View.OnClickList
         videoView = (VideoView)findViewById(R.id.video);
         tTitle = (TextView) findViewById(R.id.tTitle);
         tContent = (TextView) findViewById(R.id.tContent);
+        tTime = (TextView) findViewById(R.id.tTime);
+
+        tTitle.setText(title);
+
+        long time = (long)duration;
+        Date createdDate = new Date(time*1000);
+        Date now = new Date(System.currentTimeMillis());
+        String elapsetime = Params.getCreateTime(createdDate, now);
+        tTime.setText(elapsetime);
 
         bar = (AppBarLayout)findViewById(R.id.appBarLayout);
         frameVideo = (RelativeLayout)findViewById(R.id.frameVideo);
@@ -112,7 +127,7 @@ public class ESVideoDetail extends AppCompatActivity implements View.OnClickList
 
 
 
-//        new RequestTaskReferee().execute();
+//        new RequestTaskClub().execute();
 
     }
 
@@ -227,7 +242,7 @@ public class ESVideoDetail extends AppCompatActivity implements View.OnClickList
 
 //                    Log.d("log","---> getDifference("+createdDate+", "+now+")");
 
-                    String elapsetime = getDifference(createdDate, now);
+                    String elapsetime = Params.getCreateTime(createdDate, now);
 
 //                    Log.d("log","---> create date : "+ elapsetime);
 
@@ -240,6 +255,7 @@ public class ESVideoDetail extends AppCompatActivity implements View.OnClickList
                     Glide.with(getBaseContext()).load(imgPath).into(img);
                     tTitle.setText(title);
                     tContent.setText(content);
+                    tTime.setText(elapsetime);
 
 //                    Log.d("log","---> Related News : "+ relatedNews);
                     /*** update related news ***/

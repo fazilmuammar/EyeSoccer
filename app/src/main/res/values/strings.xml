@@ -19,4 +19,11 @@
     <string name="related_news">Related News</string>
     <string name="related_video">Related Video</string>
     <string name="perangkat_pertandingan">Perangkat Pertandingan</string>
+
+    <string name="home_title_news">Eyenews</string>
+    <string name="home_title_video">Eyetube</string>
+    <string name="home_title_wallet">Eyewallet</string>
+    <string name="home_title_home">Home</string>
+    <string name="klub">Klub</string>
+    <string name="event">Event</string>
 </resources>

@@ -16,8 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.ferhatproduction.eyesoccer.Adapter.ESListNewsAdapter;
-import com.ferhatproduction.eyesoccer.Adapter.ESListVideoAdapter;
+import com.ferhatproduction.eyesoccer.Adapter.ESHomeListEventsAdapter;
 import com.ferhatproduction.eyesoccer.Class.Params;
 import com.ferhatproduction.eyesoccer.R;
 
@@ -34,7 +33,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ESTabVideoFragment extends Fragment implements ESListVideoAdapter.ListItemVideoClickListener {
+public class ESTabEventsFragment extends Fragment implements ESHomeListEventsAdapter.ListItemEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -47,14 +46,14 @@ public class ESTabVideoFragment extends Fragment implements ESListVideoAdapter.L
     private ProgressBar progressBar;
     private ScrollView vContent;
 
-    private OnFragmentVideoInteractionListener mListener;
+    private OnFragmentEventsInteractionListener mListener;
 
-    public ESTabVideoFragment() {
+    public ESTabEventsFragment() {
         // Required empty public constructor
     }
 
-    public static ESTabVideoFragment newInstance(String param1, String param2) {
-        ESTabVideoFragment fragment = new ESTabVideoFragment();
+    public static ESTabEventsFragment newInstance(String param1, String param2) {
+        ESTabEventsFragment fragment = new ESTabEventsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -71,7 +70,7 @@ public class ESTabVideoFragment extends Fragment implements ESListVideoAdapter.L
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_estab_watch, container, false);
+        View view = inflater.inflate(R.layout.fragment_estab_events, container, false);
 
         img = (ImageView)view.findViewById(R.id.img);
         title = (TextView)view.findViewById(R.id.tTitle);
@@ -90,17 +89,23 @@ public class ESTabVideoFragment extends Fragment implements ESListVideoAdapter.L
         return view;
     }
 
+    public void onButtonPressed(String id) {
+        if (mListener != null) {
+            mListener.onFragmentEventInteraction(id);
+        }
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new RequestTaskNews().execute();
+        new RequestTasEvents().execute();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentVideoInteractionListener) {
-            mListener = (OnFragmentVideoInteractionListener) context;
+        if (context instanceof OnFragmentEventsInteractionListener) {
+            mListener = (OnFragmentEventsInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -114,19 +119,18 @@ public class ESTabVideoFragment extends Fragment implements ESListVideoAdapter.L
     }
 
     @Override
-    public void onListItemClick(String id, int type, String path, int duration, String title, long createdate) {
-        if (mListener != null) {
-            mListener.onFragmentVideoInteraction(id, type, path, duration, title, createdate);
-        }
+    public void onListEventItemClick(String id) {
+
     }
 
-    public interface OnFragmentVideoInteractionListener {
-        void onFragmentVideoInteraction(String id, int type, String path, int duration, String title, long createdate);
+
+    public interface OnFragmentEventsInteractionListener {
+        void onFragmentEventInteraction(String id);
     }
 
-    private class RequestTaskNews extends AsyncTask<String, Void, String> {
+    private class RequestTasEvents extends AsyncTask<String, Void, String> {
 
-        public RequestTaskNews(){
+        public RequestTasEvents(){
         }
 
         @Override
@@ -137,7 +141,7 @@ public class ESTabVideoFragment extends Fragment implements ESListVideoAdapter.L
 
             try {
                 /*** set url ***/
-                URL url = new URL(Params.URL_WATCH);
+                URL url = new URL(Params.URL_EVENTS);
                 Log.d("log","url:"+url);
                 conn = (HttpURLConnection) url.openConnection();
 
@@ -173,8 +177,8 @@ public class ESTabVideoFragment extends Fragment implements ESListVideoAdapter.L
             } catch (MalformedURLException e) {
                 e.printStackTrace();
 
-            } catch (Throwable t) {
-                t.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
 
             } finally {
                 if(conn != null){
@@ -202,26 +206,25 @@ public class ESTabVideoFragment extends Fragment implements ESListVideoAdapter.L
 
                 JSONObject result = new JSONObject(s);
                 String status = result.get("status").toString();
-                JSONObject data = (JSONObject) result.get("data");
-                JSONArray news = data.getJSONArray("videos");
 
-                ArrayList<HashMap<String,Object>> resultVideo = new ArrayList<HashMap<String,Object>>();
-                for(int i=0; i<news.length(); i++){
-                    JSONObject item = (JSONObject) news.get(i);
-                    HashMap<String,Object> temp = new HashMap<String,Object>();
-                    temp.put("id", item.get("id").toString());
-                    temp.put("featured_image_url", item.get("featured_image_url").toString());
-                    temp.put("create_date", item.get("create_date").toString());
-                    temp.put("video_url", item.get("video_url").toString());
-                    temp.put("title", item.get("title").toString());
-                    temp.put("categories", item.get("categories"));
-                    temp.put("duration", item.get("duration"));
-                    resultVideo.add(temp);
+                if(status.equals("success")){
+                    JSONArray events = result.getJSONArray("data");
+                    ArrayList<HashMap<String,Object>> resultNews = new ArrayList<HashMap<String,Object>>();
+                    for(int i=0; i<events.length(); i++){
+                        JSONObject item = (JSONObject) events.get(i);
+                        HashMap<String,Object> temp = new HashMap<String,Object>();
+                        temp.put("id", item.get("id").toString());
+                        temp.put("featured_image_url", item.get("featured_image_url").toString());
+                        temp.put("create_date", item.get("create_date").toString());
+                        temp.put("title", item.get("title").toString());
+                        temp.put("categories", item.get("categories"));
+                        resultNews.add(temp);
+                    }
+
+                    ESHomeListEventsAdapter listEventsAdapter = new ESHomeListEventsAdapter(resultNews, ESTabEventsFragment.this);
+                    list.invalidate();
+                    list.setAdapter(listEventsAdapter);
                 }
-
-                ESListVideoAdapter listVideoAdapter = new ESListVideoAdapter(resultVideo, ESTabVideoFragment.this);
-                list.invalidate();
-                list.setAdapter(listVideoAdapter);
 
             } catch (Exception e){
                 Log.d("log","exception -> "+ e.getMessage());

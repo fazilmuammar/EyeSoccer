@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/progressBar"
+        android:visibility="gone"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Info -->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_big">
+                    <ImageView
+                        android:id="@+id/img"
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:src="@drawable/dummy_image"
+                        android:layout_centerHorizontal="true"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dummy_content_short"
+                        android:id="@+id/description"
+                        android:layout_below="@+id/img"
+                        android:layout_marginTop="@dimen/space_medium" />
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <!-- Profil -->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_medium">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PROFIL"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="@dimen/space_medium"
+                        android:layout_marginTop="@dimen/space_medium"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/space_medium">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nama"
+                            android:textColor="@color/black_overlay"/>
+                        <TextView
+                            android:id="@+id/nama"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="nama klub"
+                            android:textColor="@color/gray_dark"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/gray_light"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/space_medium">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Julukan"
+                            android:textColor="@color/black_overlay"/>
+                        <TextView
+                            android:id="@+id/julukan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="julukan klub"
+                            android:textColor="@color/gray_dark"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/gray_light"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/space_medium">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tanggal Berdiri"
+                            android:textColor="@color/black_overlay"/>
+                        <TextView
+                            android:id="@+id/tanggalBerdiri"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="17 Juni 1990"
+                            android:textColor="@color/gray_dark"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/gray_light"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/space_medium">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Alamat"
+                            android:textColor="@color/black_overlay"/>
+                        <TextView
+                            android:id="@+id/alamat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jakarta"
+                            android:textColor="@color/gray_dark"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/gray_light"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/space_medium">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Telp &amp; Fax"
+                            android:textColor="@color/black_overlay"/>
+                        <TextView
+                            android:id="@+id/telp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="021 9999"
+                            android:textColor="@color/gray_dark"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/gray_light"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/space_medium">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Email"
+                            android:textColor="@color/black_overlay"/>
+                        <TextView
+                            android:id="@+id/email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="email klub"
+                            android:textColor="@color/gray_dark"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/gray_light"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/space_medium">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Stadion"
+                            android:textColor="@color/black_overlay"/>
+                        <TextView
+                            android:id="@+id/stadiun"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="stadiun klub"
+                            android:textColor="@color/gray_dark"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/gray_light"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/space_medium">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Suporter"
+                            android:textColor="@color/black_overlay"/>
+                        <TextView
+                            android:id="@+id/suporter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="suporter klub"
+                            android:textColor="@color/gray_dark"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"/>
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/list" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+</LinearLayout>

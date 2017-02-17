@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_medium"
+        android:orientation="vertical">
+        <!-- Header -->
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/gray_light"
+            android:gravity="center"
+            android:padding="3dp"
+            android:layout_marginTop="@dimen/space_medium">
+            <TextView
+                android:id="@+id/tanggal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jumat 20 Desember 1029"
+                android:textSize="10dp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+
+        <!-- Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/info"
+            android:visibility="visible">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="0dp"
+                android:orientation="horizontal">
+                <!-- tim kiri -->
+
+                <TextView
+                    android:id="@+id/timKiri"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tim Kiri"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="right"
+                    android:textSize="@dimen/space_standard"/>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@android:mipmap/sym_def_app_icon"
+                    android:id="@+id/logoKiri"
+                    android:layout_marginLeft="@dimen/space_small"/>
+                <TextView
+                    android:id="@+id/jam"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="16:00"
+                    android:textSize="@dimen/space_standard"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/space_small"
+                    android:layout_marginRight="@dimen/space_small"/>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@android:mipmap/sym_def_app_icon"
+                    android:id="@+id/logoKanan"
+                    android:layout_marginRight="@dimen/space_small"/>
+                <TextView
+                    android:id="@+id/timKanan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tim Kanan"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="left"
+                    android:textSize="@dimen/space_standard"/>
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/img"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:layout_width="100dp"-->
+                    <!--android:layout_height="60dp"-->
+                    <!--android:background="#ccc"-->
+                    <!--android:src="@drawable/dummy_image" />-->
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Lorem ipsum dolor sit amet nuisaance demo carpo"-->
+                    <!--android:textColor="#000"-->
+                    <!--android:id="@+id/tTitle"-->
+                    <!--android:layout_toRightOf="@+id/img"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:maxLines="2"/>-->
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

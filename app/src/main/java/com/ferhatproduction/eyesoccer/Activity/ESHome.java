@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import com.ferhatproduction.eyesoccer.Class.AnimatorUtils;
 import com.ferhatproduction.eyesoccer.Class.Params;
+import com.ferhatproduction.eyesoccer.Fragment.ESTabEventsFragment;
 import com.ferhatproduction.eyesoccer.Fragment.ESTabHomeFragment;
 import com.ferhatproduction.eyesoccer.Fragment.ESTabNewsFragment;
 import com.ferhatproduction.eyesoccer.Fragment.ESTabVideoFragment;
@@ -38,6 +40,7 @@ public class ESHome extends AppCompatActivity implements
         ESTabHomeFragment.OnFragmentInteractionListener,
         ESTabNewsFragment.OnFragmentNewsInteractionListener,
         ESTabVideoFragment.OnFragmentVideoInteractionListener,
+        ESTabEventsFragment.OnFragmentEventsInteractionListener,
         View.OnClickListener{
 
     private ViewPagerAdapter adapter;
@@ -48,6 +51,7 @@ public class ESHome extends AppCompatActivity implements
     private ArcLayout arcLayout;
     private View menuLayout;
     private LinearLayout fab;
+    private boolean radialMenuIsOpen = false;
 
     ImageView iconHome;
     ImageView iconVideo;
@@ -70,6 +74,7 @@ public class ESHome extends AppCompatActivity implements
 
         fab = (LinearLayout)findViewById(R.id.fab);
         menuLayout = findViewById(R.id.menu_layout);
+        menuLayout.setOnClickListener(this);
         arcLayout = (ArcLayout) findViewById(R.id.arc);
 
         fab.setOnClickListener(this);
@@ -90,6 +95,7 @@ public class ESHome extends AppCompatActivity implements
         mainTitle = (TextView)findViewById(R.id.mainTitle);
 
         findViewById(R.id.radialWasit).setOnClickListener(this);
+        findViewById(R.id.radialKlub).setOnClickListener(this);
 
 
         setupTabs();
@@ -165,12 +171,15 @@ public class ESHome extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentVideoInteraction(String id, int type, String path) {
+    public void onFragmentVideoInteraction(String id, int type, String path, int duration, String title, long createdate) {
         hideMenu();
         Intent intent = new Intent(this, ESVideoDetail.class);
         intent.putExtra("id", id);
         intent.putExtra("type", type);
         intent.putExtra("path", path);
+        intent.putExtra("duration", duration);
+        intent.putExtra("title", title);
+        intent.putExtra("createdate", createdate);
         startActivity(intent);
     }
 
@@ -193,11 +202,27 @@ public class ESHome extends AppCompatActivity implements
     }
 
     @Override
+    public void onFragmentEventInteraction(String id) {
+        hideMenu();
+        Intent intent = new Intent(this, ESEventDetail.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
+    }
+
+    @Override
     public void onClick(View view) {
         if (view.getId() == R.id.fab) {
+            Log.d("fab","fab click");
             onFabClick(view);
             return;
         }
+// else if (view.getId() == R.id.menu_layout) {
+//            Log.d("fab","layout click");
+//            if(radialMenuIsOpen){
+//                hideMenu();
+//            }
+//            return;
+//        }
 
         hideMenu();
 
@@ -238,6 +263,13 @@ public class ESHome extends AppCompatActivity implements
                 Intent iWasit = new Intent(this, ESRefereeList.class);
                 startActivity(iWasit);
                 break;
+
+            case R.id.radialKlub:
+                Intent iKlub = new Intent(this, ESClubList.class);
+                startActivity(iKlub);
+                break;
+
+
         }
 
 
@@ -316,8 +348,12 @@ public class ESHome extends AppCompatActivity implements
 
     private void onFabClick(View v) {
         if (v.isSelected()) {
+            Log.d("fab","hide menu");
+            radialMenuIsOpen = false;
             hideMenu();
         } else {
+            Log.d("fab","show menu");
+            radialMenuIsOpen = true;
             showMenu();
         }
         v.setSelected(!v.isSelected());
