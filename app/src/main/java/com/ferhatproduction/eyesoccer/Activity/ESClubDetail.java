@@ -1,5 +1,7 @@
 package com.ferhatproduction.eyesoccer.Activity;
 
+import android.graphics.drawable.Animatable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -13,10 +15,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
+import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.imagepipeline.image.ImageInfo;
+import com.ferhatproduction.eyesoccer.Adapter.ESClubGalleryListAdapter;
+import com.ferhatproduction.eyesoccer.Class.Globals;
 import com.ferhatproduction.eyesoccer.Class.Params;
+import com.ferhatproduction.eyesoccer.Fragment.ESClubGalleryFragment;
 import com.ferhatproduction.eyesoccer.Fragment.ESClubInfoFragment;
+import com.ferhatproduction.eyesoccer.Fragment.ESClubKontakFragment;
+import com.ferhatproduction.eyesoccer.Fragment.ESClubStatisticFragment;
 import com.ferhatproduction.eyesoccer.R;
 
 import org.json.JSONObject;
@@ -31,9 +43,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.relex.photodraweeview.PhotoDraweeView;
+
 public class ESClubDetail extends AppCompatActivity implements
         View.OnClickListener,
-        ESClubInfoFragment.OnClubInfoListener{
+        ESClubInfoFragment.OnClubInfoListener,
+ESClubGalleryFragment.OnGalleryListener{
 
     private ViewPagerAdapter adapter;
     private ViewPager viewPager;
@@ -45,6 +60,10 @@ public class ESClubDetail extends AppCompatActivity implements
     String _imageUrl, _description;
 
     ESClubInfoFragment fragmentInfo;
+
+    PhotoDraweeView imageView;
+    private RelativeLayout imageGallery;
+    ProgressBar imageProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +78,17 @@ public class ESClubDetail extends AppCompatActivity implements
         mainTitle = (TextView)findViewById(R.id.mainTitle);
         mainTitle.setText(clubName);
 
+        findViewById(R.id.btnBackActionBar).setOnClickListener(this);
+
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        imageProgressBar = (ProgressBar)findViewById(R.id.imageProgressBar);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        imageView = (PhotoDraweeView) findViewById(R.id.imageView);
+        imageGallery = (RelativeLayout) findViewById(R.id.imageGallery);
+        imageGallery.setVisibility(View.GONE);
+
+        findViewById(R.id.btCloseGallery).setOnClickListener(this);
 
 //        setupTabs();
         new RequestTaskDetail().execute();
@@ -81,9 +109,9 @@ public class ESClubDetail extends AppCompatActivity implements
 
         adapter.addFragment(new ESClubInfoFragment(), "INFO");
         adapter.addFragment(new ESClubInfoFragment(), "PEMAIN");
-        adapter.addFragment(new ESClubInfoFragment(), "STATISTIK");
-        adapter.addFragment(new ESClubInfoFragment(), "GALERI");
-        adapter.addFragment(new ESClubInfoFragment(), "KONTAK");
+        adapter.addFragment(new ESClubStatisticFragment(), "STATISTIK");
+        adapter.addFragment(new ESClubGalleryFragment(), "GALERI");
+        adapter.addFragment(new ESClubKontakFragment(), "KONTAK");
         viewPager.setAdapter(adapter);
     }
 
@@ -91,6 +119,30 @@ public class ESClubDetail extends AppCompatActivity implements
     public String onGetInfo() {
 //        new RequestEventDetail().execute();
         return _imageUrl;
+    }
+
+    @Override
+    public void onShowFullImage(String url) {
+//        imageView.setPhotoUri(Uri.parse(url));
+        imageProgressBar.setVisibility(View.VISIBLE);
+        PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
+        controller.setUri(Uri.parse(url));
+        controller.setOldController(imageView.getController());
+        controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
+            @Override
+            public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
+                super.onFinalImageSet(id, imageInfo, animatable);
+                if (imageInfo == null || imageView == null) {
+                    return;
+                }
+                Log.d("log","---> image donwloaded");
+                imageProgressBar.setVisibility(View.GONE);
+                imageView.update(imageInfo.getWidth(), imageInfo.getHeight());
+            }
+        });
+        imageView.setController(controller.build());
+
+        imageGallery.setVisibility(View.VISIBLE);
     }
 
     private class RequestTaskDetail extends AsyncTask<String, Void, String> {
@@ -172,14 +224,19 @@ public class ESClubDetail extends AppCompatActivity implements
                 JSONObject result = new JSONObject(s);
                 String status = result.get("status").toString();
 
-//                Log.d("log"," result : "+s);
+                Log.d("log"," result club : "+s);
 
                 if(status.equals("success")){
                     JSONObject data = (JSONObject) result.get("data");
+
+                    Globals globals = (Globals)getApplication();
+                    globals.setClubDetail(data);
+
                     _description = (String)data.get("description");
                     _imageUrl = (String)data.get("image_url");
 
 //                    fragmentInfo.updateInfo(_imageUrl, _description);
+
                     setupTabs();
                 }
 
@@ -225,15 +282,18 @@ public class ESClubDetail extends AppCompatActivity implements
 
     @Override
     public void onClick(View view) {
-
-
+        if(view.getId() == R.id.btnBackActionBar){
+            finish();
+        } else if(view.getId() == R.id.btCloseGallery){
+            imageGallery.setVisibility(View.GONE);
+        }
     }
 
-    public String getInfoData(Fragment fragment){
-//        new RequestEventDetail().execute();
-        ((ESClubInfoFragment)fragment).updateInfo(_imageUrl, _description);
-        return _imageUrl;
-    }
+//    public String getInfoData(Fragment fragment){
+////        new RequestEventDetail().execute();
+//        ((ESClubInfoFragment)fragment).updateInfo(_imageUrl, _description);
+//        return _imageUrl;
+//    }
 
     class ViewPagerAdapter extends FragmentPagerAdapter implements ViewTreeObserver.OnScrollChangedListener {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -283,7 +343,5 @@ public class ESClubDetail extends AppCompatActivity implements
 
 
     }
-
-
 
 }

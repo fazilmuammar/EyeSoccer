@@ -19,10 +19,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ferhatproduction.eyesoccer.Activity.ESClubDetail;
 import com.ferhatproduction.eyesoccer.Adapter.ESListNewsAdapter;
+import com.ferhatproduction.eyesoccer.Class.Globals;
 import com.ferhatproduction.eyesoccer.Class.Params;
 import com.ferhatproduction.eyesoccer.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -37,14 +39,51 @@ import java.util.HashMap;
 
 public class ESClubInfoFragment extends Fragment {
 
-    private ImageView img;
-    private TextView description;
-    private RecyclerView list;
+//    private ImageView img;
+//    private TextView description;
+//    private RecyclerView list;
+//    private ProgressBar progressBar;
+//    private ScrollView content;
+    private JSONObject data;
+
+    private OnClubInfoListener mListener;
 
     private ProgressBar progressBar;
     private ScrollView content;
+    private ImageView img;
+    private TextView description;
+    private TextView nama;
+    private TextView julukan;
+    private TextView tanggalBerdiri;
+    private TextView alamat;
+    private TextView telp;
+    private TextView email;
+    private TextView stadiun;
+    private TextView suporter;
+    private RecyclerView list;
 
-    private OnClubInfoListener mListener;
+    /**
+     * Find the Views in the layout<br />
+     * <br />
+     * Auto-created on 2017-02-19 09:29:05 by Android Layout Finder
+     * (http://www.buzzingandroid.com/tools/android-layout-finder)
+     */
+    private void findViews(View view) {
+        progressBar = (ProgressBar)view.findViewById( R.id.progressBar );
+        content = (ScrollView)view.findViewById( R.id.content );
+        img = (ImageView)view.findViewById( R.id.img );
+        description = (TextView)view.findViewById( R.id.description );
+        nama = (TextView)view.findViewById( R.id.nama );
+        julukan = (TextView)view.findViewById( R.id.julukan );
+        tanggalBerdiri = (TextView)view.findViewById( R.id.tanggalBerdiri );
+        alamat = (TextView)view.findViewById( R.id.alamat );
+        telp = (TextView)view.findViewById( R.id.telp );
+        email = (TextView)view.findViewById( R.id.email );
+        stadiun = (TextView)view.findViewById( R.id.stadiun );
+        suporter = (TextView)view.findViewById( R.id.suporter );
+        list = (RecyclerView)view.findViewById( R.id.list );
+    }
+
 
     public ESClubInfoFragment() {
         // Required empty public constructor
@@ -76,12 +115,38 @@ public class ESClubInfoFragment extends Fragment {
         progressBar = (ProgressBar)view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
+        findViews(view);
+
         if (mListener != null) {
 //            String m = mListener.onGetInfo();
 //            Log.d("info", " ---> message : "+m);
         }
 
-        ((ESClubDetail)getActivity()).getInfoData(this);
+        /*** get global data ***/
+
+//        ((ESClubDetail)getActivity()).getInfoData(this);
+
+        Globals globals = (Globals)getActivity().getApplication();
+        data = globals.getClubDetail();
+
+        try {
+            description.setText(data.get("description").toString());
+            String imageUrl = (String)data.get("image_url");
+            Glide.with(getActivity()).load(imageUrl).placeholder(android.R.mipmap.sym_def_app_icon).into(img);
+
+            nama.setText(data.get("name").toString());
+            julukan.setText(data.get("nickname").toString());
+
+            tanggalBerdiri.setText(Params.miliToDateString((Integer) data.get("established_date")));
+            alamat.setText(data.get("address").toString());
+            telp.setText(data.get("phone").toString());
+            email.setText(data.get("email").toString());
+            stadiun.setText(data.get("stadium").toString());
+            suporter.setText((String)data.get("supporter"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         return view;
     }

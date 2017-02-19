@@ -2,7 +2,9 @@ package com.ferhatproduction.eyesoccer.Class;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by leo on 1/28/17.
@@ -106,4 +108,12 @@ public class Params {
 //        tRemain.setText(dayInfo+hourInfo);
         return "";
     }
+
+    public static String miliToDateString(int date){
+        SimpleDateFormat df = new SimpleDateFormat("dd-mm-yyyy", Locale.UK);
+        String dateString = df.format(date);
+        return dateString;
+    }
+
+
 }
